@@ -1,6 +1,6 @@
 package com.ssafy.myapp.config;
 
-import com.ssafy.myapp.interceptor.JwtInterceptor;
+import com.ssafy.myapp.api.interceptor.JwtInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
