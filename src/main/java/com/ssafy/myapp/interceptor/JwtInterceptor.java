@@ -1,6 +1,6 @@
 package com.ssafy.myapp.interceptor;
 
-import com.ssafy.myapp.model.service.JwtService;
+import com.ssafy.myapp.service.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
