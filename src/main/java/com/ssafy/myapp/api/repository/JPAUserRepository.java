@@ -8,8 +8,8 @@ import java.util.Optional;
 //@Repository
 public interface JPAUserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByPassword(String password);
-
+    @Override
+    Optional<User> findById(String id);
 
     //    int checkById(String id);
 //

@@ -25,7 +25,14 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public <T> String create(String key, T data, String subject) {
-        String jwt = Jwts.builder().setHeaderParam("typ", "JWT").setHeaderParam("regDate", System.currentTimeMillis()).setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * EXPIRE_MINUTES)).setSubject(subject).claim(key, data).signWith(SignatureAlgorithm.HS256, this.generateKey()).compact();
+        String jwt = Jwts
+                .builder()
+                .setHeaderParam("typ", "JWT")
+                .setHeaderParam("regDate", System.currentTimeMillis())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * EXPIRE_MINUTES))
+                .setSubject(subject).claim(key, data)
+                .signWith(SignatureAlgorithm.HS256, this.generateKey())
+                .compact();
         return jwt;
     }
 

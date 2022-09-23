@@ -6,30 +6,25 @@ import javax.persistence.*;
 
 @NoArgsConstructor
 @Getter
-@ToString
-//@Table(name = "USERS")  // 테이블 지정
+//@Table(name = "USER")  // 테이블 지정
 @Entity
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idx")
+    private Long idx;
+
     @Column(name = "id")
-    private Long id;
+    private String id;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "recommendFlag")
-    private int recommendFlag;
-
     @Builder
-    public User(Long id, String password, String email, int recommendFlag) {
+    public User(Long idx, String id, String password) {
+        this.idx = idx;
         this.id = id;
         this.password = password;
-        this.email = email;
-        this.recommendFlag = recommendFlag;
     }
 }

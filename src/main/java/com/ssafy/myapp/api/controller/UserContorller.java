@@ -3,17 +3,18 @@ package com.ssafy.myapp.api.controller;
 import com.ssafy.myapp.domain.User;
 import com.ssafy.myapp.api.service.JwtService;
 import com.ssafy.myapp.api.service.UserService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -31,44 +32,49 @@ public class UserContorller {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/")
-    public ResponseEntity<User> registUser() throws Exception {
+    @PostMapping("/save")
+    public ResponseEntity<String> registUser(@RequestBody Map<String, String> map) {
         System.out.println("User controller create 시작");
-//        user.setId(map.get("id"));
-//        user.setPassword(map.get("password"));
-//        System.out.println(user.getId());
-//        User savedUser = userService.createMember(user);
         User user = User
                 .builder()
-                .password("1234")
-                .email("user@example.com")
+                .id(map.get("id"))
+                .password(map.get("password"))
                 .build();
-//        System.out.println(user);
-        User u = userService.createMember(user);
-        Optional<User> us = userService.fbp();
-        logger.debug("Optional User: " + us);
-        return new ResponseEntity<>(u, HttpStatus.OK);
+        User registeredUser = userService.save(user);
+
+        HttpStatus state;
+        if (registeredUser != null) state = HttpStatus.OK;
+        else state = HttpStatus.INTERNAL_SERVER_ERROR;
+        return new ResponseEntity<>("", state);
+    }
+/*
+* @ApiOperation(value = "회원정보삭제", notes = "", response = Map.class)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> deleteUser(
+            @RequestBody @ApiParam(value = "로그인 시 필요한 회원정보(아이디, 비밀번호).", required = true) @PathVariable String id) {
+        System.out.println("delete user 호출");
+        * */
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> delete (@PathVariable String id) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status;
+        User uesr = userService.findById(id);
+        userService.delete(uesr);
+        resultMap.put("message", SUCCESS);
+        status = HttpStatus.ACCEPTED;
+
+        try {
+        } catch (Exception e) {
+            logger.error("삭제 실패 : {}", e);
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
-//    @PostMapping("/create")
-//    public ResponseEntity<User> registUser(@RequestBody Map<String, String> map) throws Exception {
-//        System.out.println("User controller create 시작");
-////        user.setId(map.get("id"));
-////        user.setPassword(map.get("password"));
-////        System.out.println(user.getId());
-//        User user = null;
-//        User savedUser = userService.createMember(user);
-//        return new ResponseEntity<>(savedUser, HttpStatus.OK);
-//    }
+//    token = jwtService.create("id", user.getId(), "token");
 
-//    @GetMapping("/check/{id}")
-//    public int checkId(@PathVariable String id) throws Exception {
-//        System.out.println("checkId controller 시작");
-//        int cnt = 1;
-//        cnt = userService.checkId(id);
-//        return cnt;
-//    }
-//
 //    @PostMapping
 //    public ResponseEntity<String> registUser(@RequestBody Map<String, String> map) throws Exception {
 //        System.out.println("resister controller 시작");
@@ -77,7 +83,6 @@ public class UserContorller {
 //        User loginUser = userService.loginUser(map.get("id"), map.get("password"));
 //        String token = "";
 //        if (loginUser != null) {
-//            token = jwtService.create("id", loginUser.getId(), "token");
 //            return new ResponseEntity<String>(token, HttpStatus.OK);
 //        } else {
 //            return new ResponseEntity<String>(token, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -106,24 +111,7 @@ public class UserContorller {
 //        return new ResponseEntity<Map<String, Object>>(resultMap, status);
 //    }
 //
-//    @ApiOperation(value = "회원정보삭제", notes = "", response = Map.class)
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Map<String, Object>> deleteUser(
-//            @RequestBody @ApiParam(value = "로그인 시 필요한 회원정보(아이디, 비밀번호).", required = true) @PathVariable String id) {
-//        System.out.println("delete user 호출");
-//        Map<String, Object> resultMap = new HashMap<>();
-//        HttpStatus status = null;
-//        try {
-//            userService.deleteUser(id);
-//            resultMap.put("message", SUCCESS);
-//            status = HttpStatus.ACCEPTED;
-//        } catch (Exception e) {
-//            logger.error("삭제 실패 : {}", e);
-//            resultMap.put("message", e.getMessage());
-//            status = HttpStatus.INTERNAL_SERVER_ERROR;
-//        }
-//        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-//    }
+
 //
 //    @ApiOperation(value = "로그인", notes = "Access-token과 로그인 결과 메세지를 반환한다.", response = Map.class)
 //    @PostMapping("/login")
@@ -155,6 +143,7 @@ public class UserContorller {
 //    @GetMapping("/{id}")
 //    public ResponseEntity<Integer> checkPasswordFind(@PathVariable String id, @RequestParam String email) throws Exception {
 //        int cnt = 0;
+//Optional<User> us = userService.fbp();
 //        System.out.println("checkPasswordFind 실행");
 //        cnt = userService.checkPasswordFind(id, email);
 //        return new ResponseEntity<Integer>(cnt, HttpStatus.OK);
@@ -181,3 +170,15 @@ public class UserContorller {
 //        return new ResponseEntity<Map<String, Object>>(resultMap, status);
 //    }
 }
+/*
+    @GetMapping("/check/{id}")
+    public int checkId(@PathVariable String id) throws Exception {
+        System.out.println("checkId controller 시작");
+        int cnt = 1;
+        cnt = userService.checkId(id);
+        return cnt;
+    }
+
+
+*
+* */
