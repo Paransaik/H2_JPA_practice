@@ -1,8 +1,5 @@
 package com.szs.account.interfaces.rest.dto;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 public class ApiResult<T> {
 
     private final T data;
@@ -32,14 +29,6 @@ public class ApiResult<T> {
 
     public String getError() {
         return error;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("data", data)
-                .append("error", error)
-                .toString();
     }
 
 }

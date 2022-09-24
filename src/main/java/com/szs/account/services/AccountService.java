@@ -1,25 +1,41 @@
 package com.szs.account.services;
 
-import com.szs.account.models.Account;
+import com.szs.account.auth.AuthorizedUser;
+import com.szs.account.models.Accounts;
+import com.szs.account.models.Transactions;
 import com.szs.account.repositories.AccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class AccountService {
 
     private final AccountRepository accountRepository;
 
+    @Autowired
+    AuthorizedUser authorizedUser;
+
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
-    public Optional<Account> getAccount(long id) {
-        return accountRepository.findById(id);
+    public Accounts save(String name) throws Exception {
+        return accountRepository
+                .save(Accounts
+                        .builder()
+                        .userId(authorizedUser.getId())
+                        .name(name)
+                        .createdAt(LocalDateTime.now())
+                        .build());
     }
 
-}
+    public List<Accounts> findAllByUserIdAscId() throws Exception {
+        return accountRepository.findAllByUserIdAscId(authorizedUser.getId());
+    }
+
 
 
 }
