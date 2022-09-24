@@ -20,7 +20,6 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
 
-    @Autowired
     AuthorizedUser authorizedUser;
 
     public TransactionService(TransactionRepository transactionRepository) {

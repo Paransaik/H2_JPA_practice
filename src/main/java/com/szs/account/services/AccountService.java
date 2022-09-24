@@ -15,7 +15,6 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
 
-    @Autowired
     AuthorizedUser authorizedUser;
 
     public AccountService(AccountRepository accountRepository) {
@@ -32,8 +31,8 @@ public class AccountService {
                         .build());
     }
 
-    public List<Accounts> findAllByUserIdAscId() throws Exception {
-        return accountRepository.findAllByUserIdAscId(authorizedUser.getId());
+    public List<Accounts> findAllByUserIdOrderByIdAsc() throws Exception {
+        return accountRepository.findAllByUserIdOrderByIdAsc(authorizedUser.getId());
     }
 
 

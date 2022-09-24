@@ -67,11 +67,11 @@ public class Apis {
       "error": null
      * */
     @GetMapping("/accounts")
-    public ApiResult<?> findAllByUserIdAscId(
+    public ApiResult<?> findAllByUserIdOrderByIdAsc(
             @RequestAttribute(required = false) AuthorizedUser authorizedUser
     ) throws Exception {
         return ApiResult.succeed(
-                accountService.findAllByUserIdAscId()
+                accountService.findAllByUserIdOrderByIdAsc()
 //                        .orElse("fallback greeting message!")
         );
     }
