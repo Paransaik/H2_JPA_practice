@@ -11,10 +11,13 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository<Accounts, Long> {
 
     //*************nativeQuery = true 추가
-    @Modifying
-    @Query(value = "UPDATE Question q set q.showCount = q.showCount + 1 where q.questionId = :questionId" , nativeQuery = true)
-    void updateShowCount(@Param("questionId") Long questionId);
+//    @Modifying
+//    @Query(value = "UPDATE Question q set q.showCount = q.showCount + 1 where q.questionId = :questionId" , nativeQuery = true)
+//    void updateShowCount(@Param("questionId") Long questionId);
 
-    List<Accounts> findAllByUserIdOrderByIdAsc(long id);
+    Accounts findByUserId(Long userId);
+
+    List<Accounts> findAllByUserIdOrderByIdDesc(Long userId);
     //***************List<Accounts> findAllByUserIdAscId(long id); 에서 위와같이 orderby 문법 수정
+
 }

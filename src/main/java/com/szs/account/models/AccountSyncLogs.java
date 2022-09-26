@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Table(name = "account_sync_logs")
 @Getter
 @ToString
+@NoArgsConstructor
 public class AccountSyncLogs {
 
     @Id

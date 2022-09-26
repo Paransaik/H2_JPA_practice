@@ -9,9 +9,10 @@ import java.time.LocalDateTime;
 @Table(name = "transactions")
 @Getter
 @ToString
+@NoArgsConstructor
 public class Transactions {
 
-    @Id
+@Id
     @Column(name = "id")
     private Long id;
 

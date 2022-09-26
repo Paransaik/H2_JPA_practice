@@ -1,10 +1,7 @@
 package com.szs.account.services;
 
-import com.szs.account.auth.AuthorizedUser;
 import com.szs.account.models.Accounts;
-import com.szs.account.models.Transactions;
 import com.szs.account.repositories.AccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,26 +12,32 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
 
-    AuthorizedUser authorizedUser;
-
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
-    public Accounts save(String name) throws Exception {
+    public Accounts getAccount(Long userId) throws Exception {
+        return accountRepository.findByUserId(userId);
+    }
+
+    public Accounts save(Long userId, String name) throws Exception {
         return accountRepository
                 .save(Accounts
                         .builder()
-                        .userId(authorizedUser.getId())
+                        .userId(userId)
                         .name(name)
                         .createdAt(LocalDateTime.now())
                         .build());
     }
 
-    public List<Accounts> findAllByUserIdOrderByIdAsc() throws Exception {
-        return accountRepository.findAllByUserIdOrderByIdAsc(authorizedUser.getId());
+    public List<Accounts> findAllByUserIdOrderByIdDesc(Long userId) throws Exception {
+        return accountRepository.findAllByUserIdOrderByIdDesc(userId);
     }
 
-
-
+    public double getInterestDue(Long balance) {
+        double rate = (double) balance;
+        if (balance < 1000000) rate *= 0.03;
+        else rate *= 0.04;
+        return Math.round(rate * 10) / 10.0;
+    }
 }

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Table(name = "accounts")
 @Getter
 @ToString
+@NoArgsConstructor
 public class Accounts {
 
     @Id
@@ -24,8 +25,6 @@ public class Accounts {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    protected Accounts() {/*no-op*/}
 
     @Builder
     public Accounts(Long id, Long userId, String name, LocalDateTime createdAt) {
