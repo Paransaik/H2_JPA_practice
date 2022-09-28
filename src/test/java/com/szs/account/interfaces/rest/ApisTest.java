@@ -33,18 +33,24 @@ public class ApisTest {
         this.mockMvc = mockMvc;
     }
 
-    @Test
-    @DisplayName("[인증 토큰 테스트] 인증 토큰이 없다면 API 호출을 실패한다.")
-    void _00_test() throws Exception {
-        ResultActions result = mockMvc.perform(
-                get("/api/accounts")
-                        .header("Authorization", "Bearer ewogICJpZCI6IDEsCiAgImV4cGlyZSI6IDE2NzI0ODgwMDAwMDAKfQ")
-                        .accept(MediaType.APPLICATION_JSON)
-        );
-        result.andDo(print())
-                .andExpect(status().isUnauthorized())
-        ;
-    }
+//    @Test
+//    @DisplayName("[test] success")
+//    void _00_test() throws Exception {
+//        ResultActions result = mockMvc.perform(
+//                post("/api/account")
+//                        .header("Authorization", "Bearer ewogICJpZCI6IDEsCiAgImV4cGlyZSI6IDE2NzI0ODgwMDAwMDAKfQ==")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON)
+//                        .content(
+//                                toJson(
+//                                        new HashMap<String, Object>() {{
+//                                            put("name", "jeong");
+//                                        }}
+//                                )
+//                        )
+//        );
+//        result.andDo(print());
+//    }
 
     @Test
     @DisplayName("[인증 토큰 테스트] 인증 토큰이 없다면 API 호출을 실패한다.")

@@ -43,7 +43,7 @@ public class Apis {
             @RequestBody Map<String, String> map
     ) throws Exception {
         int accountsSize = accountService.findAllByUserIdOrderByIdDesc(authorizedUser.getId()).size();
-        if (accountsSize < 3) return ApiResult.succeed(accountService.save(authorizedUser.getId(), map.get("name")));
+        if (accountsSize < 3) return ApiResult.succeed(accountService.save(authorizedUser.getId(), String.valueOf(map.get("name"))));
         else return ApiResult.failed("계좌 최대 갯수 초과");
     }
 
@@ -125,7 +125,6 @@ public class Apis {
             @PathVariable Long accountId
     ) throws Exception {
         Accounts account = accountService.getAccount(authorizedUser.getId());
-        // 입출금 기록이 없으면 0으로 되야 됨
         Long balance = transactionService.getAccoutMoney(authorizedUser.getId());
         Double interestDue = accountService.getInterestDue(balance);
         return ApiResult.succeed(

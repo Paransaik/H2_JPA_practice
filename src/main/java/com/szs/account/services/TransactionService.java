@@ -37,7 +37,7 @@ public class TransactionService {
                                 .build());
             case WITHDRAW:
                 if (getAccoutMoney(userId) < amount) return null;
-                else transactionRepository
+                else return transactionRepository
                         .save(Transactions
                                 .builder()
                                 .accountId(accountId)
@@ -47,7 +47,6 @@ public class TransactionService {
                                 .createdAt(LocalDateTime.now())
                                 .build());
         }
-
         return null;
     }
 
