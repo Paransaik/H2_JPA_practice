@@ -41,4 +41,5 @@ public class AccountSyncLogs {
         this.uuid = uuid;
         this.createdAt = createdAt;
     }
+
 }

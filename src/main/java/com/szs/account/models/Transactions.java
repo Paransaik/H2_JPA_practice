@@ -41,4 +41,5 @@ public class Transactions {
         this.type = type;
         this.createdAt = createdAt;
     }
+
 }
