@@ -1,5 +1,6 @@
 package com.szs.account.auth.interceptor;
 
+import com.szs.account.auth.AuthorizedUser;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -10,17 +11,31 @@ import javax.xml.bind.DatatypeConverter;
 @Component
 public class UserAuthenticationInterceptor implements HandlerInterceptor {
 
-//    public static void main(String[] args) {
-//        byte[] token = request.getHeader("Authorization").getBytes("UTF-8");
-//        String encoded = DatatypeConverter.printBase64Binary(token);
-//        System.out.println(encoded);
-//    }
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // TODO 인증 토큰 처리 구현
-        byte[] token = request.getHeader("Authorization").getBytes("UTF-8");
-        String encoded = DatatypeConverter.printBase64Binary(token);
-        System.out.println(encoded);
+        byte[] token = DatatypeConverter.parseBase64Binary(request.getHeader("Authorization").split(" ")[1]);
+        String[] idAndExpire = new String(token, "UTF-8")
+                .replaceAll("\n", " ")
+                .replaceAll("[^\\d\\s]", "")
+                .replaceAll("\\s{2,}", " ")
+                .split(" ");
+
+
+/*
+*
+*   Map<String, Object> map = new HashMap();
+        map.put("key1", "value1");
+        map.put("key2", "value2");
+
+        Gson gson = new Gson();
+        JsonObject json = gson.toJsonTree(map).getAsJsonObject();
+
+        System.out.printf( "JSON: %s", json);
+        *
+* */
+        AuthorizedUser authorizedUser = new AuthorizedUser(Long.parseLong(idAndExpire[1]), Long.parseLong(idAndExpire[2]));
+        request.setAttribute("authorizedUser", authorizedUser);
         return true;
     }
 

@@ -24,7 +24,7 @@ public class AccountSyncLogs {
     private Long lastTransactionId;
 
     @Column(name = "balance")
-    private String balance;
+    private Long balance;
 
     @Column(name = "uuid")
     private String uuid;
@@ -33,7 +33,7 @@ public class AccountSyncLogs {
     private LocalDateTime createdAt;
 
     @Builder
-    public AccountSyncLogs(Long id, Long accountId, Long lastTransactionId, String balance, String uuid, LocalDateTime createdAt) {
+    public AccountSyncLogs(Long id, Long accountId, Long lastTransactionId, Long balance, String uuid, LocalDateTime createdAt) {
         this.id = id;
         this.accountId = accountId;
         this.lastTransactionId = lastTransactionId;

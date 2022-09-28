@@ -2,14 +2,16 @@ package com.szs.account.interfaces.rest;
 
 import com.szs.account.auth.AuthorizedUser;
 import com.szs.account.interfaces.rest.dto.ApiResult;
-import com.szs.account.interfaces.rest.dto.Money;
+import com.szs.account.interfaces.rest.dto.MoneyDto;
+import com.szs.account.interfaces.rest.dto.ResponseAccountSyncDto;
 import com.szs.account.models.Accounts;
 import com.szs.account.models.Type;
 import com.szs.account.services.AccountService;
+import com.szs.account.services.AccountSyncLogsService;
 import com.szs.account.services.TransactionService;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -17,23 +19,13 @@ public class Apis {
 
     private final AccountService accountService;
     private final TransactionService transactionService;
+    private final AccountSyncLogsService accountSyncLogsService;
 
-    public Apis(AccountService accountService, TransactionService transactionService) {
+    public Apis(AccountService accountService, TransactionService transactionService, AccountSyncLogsService accountSyncLogsService) {
         this.accountService = accountService;
         this.transactionService = transactionService;
+        this.accountSyncLogsService = accountSyncLogsService;
     }
-
-//    @GetMapping("/")
-//    public ApiResult<?> access(
-//            @RequestAttribute(required = false) AuthorizedUser authorizedUser
-//    ) throws Exception {
-//        accountService.save(3L, "TTT");
-//        accountService.save(3L, "test");
-//        accountService.save(3L, "aasd");
-//        System.out.println("TTT");
-//        return ApiResult.succeed(accountService.findAllByUserIdOrderByIdDesc(3L)
-//        );
-//    }
 
     /*
      * 2.2.1 계좌 생성
@@ -48,10 +40,10 @@ public class Apis {
     @PostMapping("/account")
     public ApiResult<?> account(
             @RequestAttribute(required = false) AuthorizedUser authorizedUser,
-            @RequestBody String name
+            @RequestBody Map<String, String> map
     ) throws Exception {
         int accountsSize = accountService.findAllByUserIdOrderByIdDesc(authorizedUser.getId()).size();
-        if (accountsSize < 3) return ApiResult.succeed(accountService.save(authorizedUser.getId(), name));
+        if (accountsSize < 3) return ApiResult.succeed(accountService.save(authorizedUser.getId(), map.get("name")));
         else return ApiResult.failed("계좌 최대 갯수 초과");
     }
 
@@ -108,12 +100,13 @@ public class Apis {
     public ApiResult<?> transaction(
             @RequestAttribute(required = false) AuthorizedUser authorizedUser,
             @PathVariable Long accountId,
-            @RequestBody Long amount,
-            @RequestBody Type type
+            @RequestBody Map<String, Object> map
     ) throws Exception {
-        return ApiResult.succeed(transactionService.save(authorizedUser.getId(), accountId, amount, type));
+        return ApiResult.succeed(transactionService.save(authorizedUser.getId(),
+                accountId,
+                Long.valueOf(String.valueOf(map.get("amount"))),
+                Type.valueOf(String.valueOf(map.get("type")))));
     }
-
 
     /*
     * 2.2.4. 단일 계좌 조회
@@ -130,36 +123,22 @@ public class Apis {
     public ApiResult<?> printAccount(
             @RequestAttribute(required = false) AuthorizedUser authorizedUser,
             @PathVariable Long accountId
-            ) throws Exception {
+    ) throws Exception {
         Accounts account = accountService.getAccount(authorizedUser.getId());
         // 입출금 기록이 없으면 0으로 되야 됨
-        Long balance = transactionService.accoutMoney(authorizedUser.getId());
+        Long balance = transactionService.getAccoutMoney(authorizedUser.getId());
         Double interestDue = accountService.getInterestDue(balance);
         return ApiResult.succeed(
-                Money
-                    .builder()
-                    .id(accountId)
-                    .userId(authorizedUser.getId())
-                    .name(account.getName())
-                    .balance(balance)
-                    .interestDue(interestDue)
-                    .createdAt(account.getCreatedAt())
-                    .build());
+                MoneyDto
+                        .builder()
+                        .id(accountId)
+                        .userId(authorizedUser.getId())
+                        .name(account.getName())
+                        .balance(balance)
+                        .interestDue(interestDue)
+                        .createdAt(account.getCreatedAt())
+                        .build());
     }
-
-    /*
-    * 2.2.5. 계좌 동기화 처리
-    * @RequestBody Long accountId,
-    * @RequestBody Long lastTransactionId
-    * @RequestBody Long balance
-    *
-    * @return
-    - `accountId`: 계좌 ID
-    - `lastTransactionId`: 마지막 거래 ID
-    - `balance`: 계좌 잔액
-    - `uuid`: 동기화 완료 UUID
-    * */
-//    @PostMapping("https://codetest.3o3.co.kr/api/account/sync")
 
     /*
     * 2.2.5. 계좌 동기화 처리
@@ -172,16 +151,15 @@ public class Apis {
     - `uuid`: 동기화 완료 UUID
     - `createdAt`: 동기화 처리 일시
     * */
-    @PostMapping("/account/{accountId}/sync")
+    @PutMapping("/account/{accountId}/sync")
     public ApiResult<?> sync(
             @RequestAttribute(required = false) AuthorizedUser authorizedUser,
-            @PathVariable Long accountId,
-            @RequestBody Long amount,
-            @RequestBody Type type
+            @PathVariable Long accountId
     ) throws Exception {
-        return ApiResult.succeed(transactionService.save(authorizedUser.getId(), accountId, amount, type));
+        Long lastTransactiondId = transactionService.getLastTransactiondId(authorizedUser.getId());
+        Long balance = transactionService.getAccoutMoney(authorizedUser.getId());
+        ResponseAccountSyncDto rasd = accountSyncLogsService.getResponseAccountSyncDto(accountId, lastTransactiondId, balance);
+        return ApiResult.succeed(accountSyncLogsService.save(authorizedUser.getId(), rasd.getAccountId(), rasd.getLastTransactionId(), rasd.getBalance(), rasd.getUuid()));
     }
-
-
 
 }

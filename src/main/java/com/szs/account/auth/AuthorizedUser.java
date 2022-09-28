@@ -26,4 +26,9 @@ public class AuthorizedUser {
         this.expire = expire;
     }
 
+    public AuthorizedUser(long id, long expire) {
+        this.id = id;
+        this.expire = expire;
+    }
+
 }

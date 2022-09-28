@@ -1,22 +1,14 @@
 package com.szs.account.services;
 
-import com.szs.account.auth.AuthorizedUser;
-import com.szs.account.interfaces.rest.dto.Money;
-import com.szs.account.models.AccountSyncLogs;
-import com.szs.account.models.Accounts;
 import com.szs.account.models.Transactions;
 import com.szs.account.models.Type;
-import com.szs.account.repositories.AccountRepository;
 import com.szs.account.repositories.TransactionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transaction;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.szs.account.models.Type.DEPOSIT;
-import static com.szs.account.models.Type.WITHDRAW;
 
 @Service
 public class TransactionService {
@@ -27,11 +19,11 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-    public Transactions getTransaction(Long userId) throws Exception {
-        return transactionRepository.findByUserId(userId);
-    }
-
     public Transactions save(Long userId, Long accountId, Long amount, Type type) throws Exception {
+        System.out.println(userId);
+        System.out.println(accountId);
+        System.out.println(amount);
+        System.out.println(type);
         switch (type) {
             case DEPOSIT:
                 return transactionRepository
@@ -44,7 +36,7 @@ public class TransactionService {
                                 .createdAt(LocalDateTime.now())
                                 .build());
             case WITHDRAW:
-                if (accoutMoney(userId) < amount) return null;
+                if (getAccoutMoney(userId) < amount) return null;
                 else transactionRepository
                         .save(Transactions
                                 .builder()
@@ -67,20 +59,19 @@ public class TransactionService {
     - `interestDue`: 지급 예정 이자
     - `createdAt`: 계좌 생성일시
     * */
-
-
-    public Long accoutMoney(Long userId) {
+    public Long getAccoutMoney(Long userId) {
         List<Transactions> transactionsList = transactionRepository.findAllByUserId(userId);
         Long money = 0L;
         for (Transactions transactions : transactionsList) {
             if (transactions.getType() == DEPOSIT) money += transactions.getAmount();
             else money -= transactions.getAmount();
         }
+        System.out.println("Account Money:: " + money);
         return money;
     }
 
-//    public Optional<Account> getAccount(long id) {
-//        return accountRepository.findById(id);
-//    }
+    public Long getLastTransactiondId(Long userId) {
+        return transactionRepository.findFirstByUserIdOrderByUserIdDesc(userId).getId();
+    }
 
 }
