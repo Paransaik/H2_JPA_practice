@@ -2,7 +2,6 @@ package com.szs.account.auth.exception;
 
 import org.springframework.http.HttpStatus;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
@@ -38,8 +37,8 @@ public enum ErrorCode {
     // INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E0003"),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "E0001", "권한이 없습니다."),
     EXPIREDTOKEN(HttpStatus.BAD_REQUEST, "E0002", "만료된 토큰입니다."),
-    COUNTERFEIT(HttpStatus.INTERNAL_SERVER_ERROR, "E0003", "위조시도");
-
+    COUNTERFEIT(HttpStatus.INTERNAL_SERVER_ERROR, "E0003", "위조시도"),
+    SECURITY_01(HttpStatus.UNAUTHORIZED, "S0001", "HTTP STATUS 401");
 
     private final HttpStatus status;
     private final String code;

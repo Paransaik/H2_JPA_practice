@@ -6,8 +6,19 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.file.AccessDeniedException;
 
-//@RestControllerAdvice
+@RestControllerAdvice
 public class ErrorCodeHendler {
+
+    @ExceptionHandler({ErrorCodeException.class})
+    public ResponseEntity<ErrorCodeDto> exceptionHandler(HttpServletRequest request, final ErrorCodeException e) {
+        //e.printStackTrace();
+        return ResponseEntity
+                .status(e.getError().getStatus())
+                .body(ErrorCodeDto.builder()
+                        .errorCode(e.getError().getCode())
+                        .errorMessage(e.getError().getMessage())
+                        .build());
+    }
 
     @ExceptionHandler({RuntimeException.class})
     public ResponseEntity<ErrorCodeDto> exceptionHandler(HttpServletRequest request, final RuntimeException e) {

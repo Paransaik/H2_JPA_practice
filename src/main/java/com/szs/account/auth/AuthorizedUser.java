@@ -1,5 +1,8 @@
 package com.szs.account.auth;
 
+import lombok.ToString;
+
+@ToString
 public class AuthorizedUser {
 
     private long id;
