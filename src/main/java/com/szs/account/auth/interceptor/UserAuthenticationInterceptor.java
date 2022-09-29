@@ -30,7 +30,7 @@ public class UserAuthenticationInterceptor implements HandlerInterceptor {
         // TODO 인증 토큰 처리 구현
         // Test 04, :: 401 UNAUTHORIZED
         String base64Token = request.getHeader("Authorization");
-        String reg = "Bearer " + "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$";
+        String reg = "Bearer " + "([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$";
 
         if (base64Token == null) throw new ErrorCodeException(ErrorCode.SECURITY_01);
         if (!Pattern.matches(reg, base64Token)) throw new ErrorCodeException(ErrorCode.SECURITY_01);
@@ -53,6 +53,9 @@ public class UserAuthenticationInterceptor implements HandlerInterceptor {
         AuthorizedUser authorizedUser =
                 new AuthorizedUser(element.getAsJsonObject().get("id").getAsLong(),
                         element.getAsJsonObject().get("expire").getAsLong());
+
+        logger.info(String.valueOf(authorizedUser));
+
         request.setAttribute("authorizedUser", authorizedUser);
         return true;
     }

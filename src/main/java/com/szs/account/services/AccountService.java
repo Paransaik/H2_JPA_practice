@@ -16,8 +16,8 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public Accounts getAccount(Long userId) throws Exception {
-        return accountRepository.findByUserId(userId);
+    public Accounts getAccount(Long userId, Long accountId) throws Exception {
+        return accountRepository.findByUserIdAndId(userId, accountId);
     }
 
     public Accounts save(Long userId, String name) throws Exception {

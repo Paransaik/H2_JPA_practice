@@ -3,6 +3,7 @@ package com.szs.account.models;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,18 +18,23 @@ public class AccountSyncLogs {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Column(name = "account_id")
     private Long accountId;
 
+    @NotNull
     @Column(name = "last_transaction_id")
     private Long lastTransactionId;
 
+    @NotNull
     @Column(name = "balance")
     private Long balance;
 
+    @NotNull
     @Column(name = "uuid")
     private String uuid;
 
+    @NotNull
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static com.szs.account.models.Type.DEPOSIT;
 
@@ -24,30 +25,15 @@ public class TransactionService {
         System.out.println(accountId);
         System.out.println(amount);
         System.out.println(type);
-        switch (type) {
-            case DEPOSIT:
-                return transactionRepository
-                        .save(Transactions
-                                .builder()
-                                .accountId(accountId)
-                                .userId(userId)
-                                .amount(amount)
-                                .type(type)
-                                .createdAt(LocalDateTime.now())
-                                .build());
-            case WITHDRAW:
-                if (getAccoutMoney(userId) < amount) return null;
-                else return transactionRepository
-                        .save(Transactions
-                                .builder()
-                                .accountId(accountId)
-                                .userId(userId)
-                                .amount(amount)
-                                .type(type)
-                                .createdAt(LocalDateTime.now())
-                                .build());
-        }
-        return null;
+        return transactionRepository
+                .save(Transactions
+                        .builder()
+                        .accountId(accountId)
+                        .userId(userId)
+                        .amount(amount)
+                        .type(type)
+                        .createdAt(LocalDateTime.now())
+                        .build());
     }
 
     /*
@@ -65,12 +51,14 @@ public class TransactionService {
             if (transactions.getType() == DEPOSIT) money += transactions.getAmount();
             else money -= transactions.getAmount();
         }
-        System.out.println("Account Money:: " + money);
         return money;
     }
 
-    public Long getLastTransactiondId(Long userId) {
-        return transactionRepository.findFirstByUserIdOrderByUserIdDesc(userId).getId();
-    }
+//    public Optional<Transactions> getLastTransactiondId(Long userId, Long accountId) {
+//        return transactionRepository.findFirstByUserIdAndAccountIdOrderByCreatedAtDesc(userId, accountId);
+//    }
 
+    public Optional<Transactions> getLastTransactiondId(Long userId, Long accountId) {
+        return transactionRepository.findFirstByUserIdAndAccountIdOrderByIdDesc(userId, accountId);
+    }
 }

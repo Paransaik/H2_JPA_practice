@@ -1,6 +1,9 @@
 package com.szs.account.interfaces.rest.dto;
 
+import com.szs.account.models.Transactions;
 import lombok.*;
+
+import java.util.Optional;
 
 @Getter
 @Setter
