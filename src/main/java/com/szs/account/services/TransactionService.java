@@ -20,7 +20,7 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-    public Transactions save(Long userId, Long accountId, Long amount, Type type) throws Exception {
+    public Transactions save(Long userId, Long accountId, Long amount, Type type) {
         System.out.println(userId);
         System.out.println(accountId);
         System.out.println(amount);
@@ -54,11 +54,8 @@ public class TransactionService {
         return money;
     }
 
-//    public Optional<Transactions> getLastTransactiondId(Long userId, Long accountId) {
-//        return transactionRepository.findFirstByUserIdAndAccountIdOrderByCreatedAtDesc(userId, accountId);
-//    }
-
     public Optional<Transactions> getLastTransactiondId(Long userId, Long accountId) {
         return transactionRepository.findFirstByUserIdAndAccountIdOrderByIdDesc(userId, accountId);
     }
+
 }

@@ -3,7 +3,6 @@ package com.szs.account.interfaces.rest.dto;
 public class ApiResult<T> {
 
     private final T data;
-
     private final String error;
 
     ApiResult(T data, String error) {

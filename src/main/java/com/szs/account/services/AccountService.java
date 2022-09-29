@@ -16,11 +16,11 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public Accounts getAccount(Long userId, Long accountId) throws Exception {
+    public Accounts getAccount(Long userId, Long accountId) {
         return accountRepository.findByUserIdAndId(userId, accountId);
     }
 
-    public Accounts save(Long userId, String name) throws Exception {
+    public Accounts save(Long userId, String name) {
         return accountRepository
                 .save(Accounts
                         .builder()
@@ -30,7 +30,7 @@ public class AccountService {
                         .build());
     }
 
-    public List<Accounts> findAllByUserIdOrderByIdDesc(Long userId) throws Exception {
+    public List<Accounts> findAllByUserIdOrderByIdDesc(Long userId) {
         return accountRepository.findAllByUserIdOrderByIdDesc(userId);
     }
 

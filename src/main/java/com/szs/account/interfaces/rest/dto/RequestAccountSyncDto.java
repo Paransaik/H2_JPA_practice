@@ -1,18 +1,15 @@
 package com.szs.account.interfaces.rest.dto;
 
-import com.szs.account.models.Transactions;
 import lombok.*;
-
-import java.util.Optional;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 public class RequestAccountSyncDto {
-    Long accountId;
-    Long lastTransactionId;
-    Long balance;
+    private Long accountId;
+    private Long lastTransactionId;
+    private Long balance;
 
     @Builder
     public RequestAccountSyncDto(Long accountId, Long lastTransactionId, Long balance) {
@@ -20,4 +17,5 @@ public class RequestAccountSyncDto {
         this.lastTransactionId = lastTransactionId;
         this.balance = balance;
     }
+
 }

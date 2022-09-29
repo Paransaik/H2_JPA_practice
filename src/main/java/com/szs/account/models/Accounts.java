@@ -7,10 +7,10 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "accounts")
 @Getter
 @ToString
 @NoArgsConstructor
+@Table(name = "accounts")
 public class Accounts {
 
     @Id

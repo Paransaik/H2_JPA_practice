@@ -1,7 +1,6 @@
 package com.szs.account.interfaces.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,7 +11,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.HashMap;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,26 +36,6 @@ public class ApisTest {
         ObjectMapper mapper = new ObjectMapper();
         return  mapper.writeValueAsString(stringObjectHashMap);
     }
-
-//    @Test
-//    @DisplayName("[test] success")
-//    void _00_test() throws Exception {
-//        ResultActions result = mockMvc.perform(
-//                post("/api/account")
-//                        .header("Authorization", "Bearer ewogICJpZCI6IDEsCiAgImV4cGlyZSI6IDE2NzI0ODgwMDAwMDAKfQ==")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON)
-//                        .content(
-//                                toJson(
-//                                        new HashMap<String, Object>() {{
-//                                            put("name", "jeong");
-//                                        }}
-//                                )
-//                        )
-//        );
-//        result.andDo(print());
-//    }
-
 
     @Test
     @DisplayName("[인증 토큰 테스트] 인증 토큰이 없다면 API 호출을 실패한다.")

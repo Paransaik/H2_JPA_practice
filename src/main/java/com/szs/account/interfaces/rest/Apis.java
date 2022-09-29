@@ -11,20 +11,14 @@ import com.szs.account.services.AccountService;
 import com.szs.account.services.AccountSyncLogsService;
 import com.szs.account.services.TransactionService;
 import org.apache.commons.lang3.EnumUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
 public class Apis {
-
-    private static final Logger logger = LoggerFactory.getLogger(Apis.class);
-
 
     private final AccountService accountService;
     private final TransactionService transactionService;
@@ -55,7 +49,6 @@ public class Apis {
 
         // Test 05::
         if (name.equals("")) return ApiResult.failed("name 파라미터 누락되었습니다.");
-
         int accountsSize = accountService.findAllByUserIdOrderByIdDesc(authorizedUser.getId()).size();
         return (accountsSize < 3) ?
                 ApiResult.succeed(accountService.save(authorizedUser.getId(), name)) :
@@ -91,7 +84,7 @@ public class Apis {
     @GetMapping("/accounts")
     public ApiResult<?> findAllByUserIdOrderByIdAsc(
             @RequestAttribute(required = false) AuthorizedUser authorizedUser
-    ) throws Exception {
+    ) {
         return ApiResult.succeed(
                 accountService.findAllByUserIdOrderByIdDesc(authorizedUser.getId())
         );
@@ -116,14 +109,11 @@ public class Apis {
             @RequestAttribute(required = false) AuthorizedUser authorizedUser,
             @PathVariable Long accountId,
             @RequestBody Map<String, Object> map
-    ) throws Exception {
+    ) {
         Long amount = Long.valueOf(String.valueOf(map.get("amount")));
         String type = String.valueOf(map.get("type"));
         long userId = authorizedUser.getId();
 
-        System.out.println(amount);
-        System.out.println(type);
-        System.out.println("userId = " + userId);
         // Test 11::
         if (amount < 1) return ApiResult.failed("거래 금액이 1원보다 작습니다.");
 
@@ -134,7 +124,6 @@ public class Apis {
         if (Type.valueOf(type).equals(Type.WITHDRAW) &&
                 transactionService.getAccoutMoney(userId) < amount)
             return ApiResult.failed("출금 금액이 잔액보다 큽니다.");
-
         return ApiResult.succeed(transactionService.save(
                 userId,
                 accountId,
@@ -157,7 +146,7 @@ public class Apis {
     public ApiResult<?> printAccount(
             @RequestAttribute(required = false) AuthorizedUser authorizedUser,
             @PathVariable Long accountId
-    ) throws Exception {
+    ) {
         Accounts account = accountService.getAccount(authorizedUser.getId(), accountId);
 
         // Test 16::
@@ -191,13 +180,12 @@ public class Apis {
     public ApiResult<?> sync(
             @RequestAttribute(required = false) AuthorizedUser authorizedUser,
             @PathVariable Long accountId
-    ) throws Exception {
+    ) {
         long userId = authorizedUser.getId();
         Accounts account = accountService.getAccount(userId, accountId);
 
         // Test 21::
         if (account == null) return ApiResult.failed("존재하지 않는 계좌입니다.");
-
         Optional<Transactions> lastTransactiondId = transactionService.getLastTransactiondId(userId, accountId);
         Long balance = transactionService.getAccoutMoney(userId);
 
@@ -205,11 +193,7 @@ public class Apis {
         ResponseAccountSyncDto rasd = (lastTransactiondId.isPresent()) ?
                 accountSyncLogsService.getResponseAccountSyncDto(accountId, lastTransactiondId.get().getId(), balance) :
                 accountSyncLogsService.getResponseAccountSyncDto(accountId, 0L, balance);
-
         return ApiResult.succeed(accountSyncLogsService.save(userId, rasd.getAccountId(), rasd.getLastTransactionId(), rasd.getBalance(), rasd.getUuid()));
     }
 
-    public Long getZero() throws Exception {
-        return 0L;
-    }
 }

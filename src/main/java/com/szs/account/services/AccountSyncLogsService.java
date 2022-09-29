@@ -3,13 +3,11 @@ package com.szs.account.services;
 import com.szs.account.interfaces.rest.dto.RequestAccountSyncDto;
 import com.szs.account.interfaces.rest.dto.ResponseAccountSyncDto;
 import com.szs.account.models.AccountSyncLogs;
-import com.szs.account.models.Transactions;
 import com.szs.account.repositories.AccountSyncLogsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class AccountSyncLogsService {
@@ -29,7 +27,7 @@ public class AccountSyncLogsService {
     - `uuid`: 동기화 완료 UUID
     - `createdAt`: 동기화 처리 일시
     * */
-    public AccountSyncLogs save(Long userId, Long accountId, Long lastTransactiondId, Long balance, String uuid) throws Exception {
+    public AccountSyncLogs save(Long userId, Long accountId, Long lastTransactiondId, Long balance, String uuid) {
         return accountSyncLogsRepository
                 .save(AccountSyncLogs
                         .builder()

@@ -7,10 +7,10 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 public class ResponseAccountSyncDto {
-    Long accountId;
-    Long lastTransactionId;
-    Long balance;
-    String uuid;
+    private Long accountId;
+    private Long lastTransactionId;
+    private Long balance;
+    private String uuid;
 
     @Builder
     public ResponseAccountSyncDto(Long accountId, Long lastTransactionId, Long balance, String uuid) {
@@ -19,4 +19,5 @@ public class ResponseAccountSyncDto {
         this.balance = balance;
         this.uuid = uuid;
     }
+
 }

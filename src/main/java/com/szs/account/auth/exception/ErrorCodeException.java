@@ -10,4 +10,5 @@ public class ErrorCodeException extends Exception {
         super(e.getMessage());
         this.error = e;
     }
+
 }

@@ -7,10 +7,10 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transactions")
 @Getter
 @ToString
 @NoArgsConstructor
+@Table(name = "transactions")
 public class Transactions {
 
     @Id
@@ -47,4 +47,5 @@ public class Transactions {
         this.type = type;
         this.createdAt = createdAt;
     }
+
 }
