@@ -1,7 +1,9 @@
 # JpaApisProject
-H2_JPA_Practice
 
-## 1. 과제개요
+기업 과제 테스트,
+JPA와 H2를 이용하여 `백엔드단 서비스 로직` 구현.
+
+## 1. 과제 개요
 
 요구 사항 항목을 참고하여 `spring-web-mvc`, `spring-data-jpa` 기반 계좌 관리 API 서버를 개발한다.
 
@@ -17,7 +19,7 @@ H2_JPA_Practice
 
 > `greeting 테이블`, `Greeting.java`, `GreetingRepository.java`, `GreetingService.java` 그리고 `GET /api/greeting/{greetingId}` API 구현은 샘플 코드이며, 과제 구현과는 전혀 관계없다. (삭제해도 무방함)
 
-## 2. 요구사항
+## 2. 요구 사항
 
 본 요구사항 항목에 따라 기존 부분을 수정하거나 새롭게 개발한다.
 
