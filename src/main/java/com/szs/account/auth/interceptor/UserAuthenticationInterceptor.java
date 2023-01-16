@@ -21,6 +21,7 @@ public class UserAuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // TODO 인증 토큰 처리 구현
+        /*System.out.println(request);
         String base64Token = request.getHeader("Authorization");
         String reg = "Bearer ([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$";
 
@@ -39,7 +40,7 @@ public class UserAuthenticationInterceptor implements HandlerInterceptor {
 
         // Test 03:: 401 UNAUTHORIZED
         if (authorizedUser.isExpired()) throw new ErrorCodeException(ErrorCode.UNAUTHORIZED);
-        request.setAttribute("authorizedUser", authorizedUser);
+        request.setAttribute("authorizedUser", authorizedUser);*/
         return true;
     }
 

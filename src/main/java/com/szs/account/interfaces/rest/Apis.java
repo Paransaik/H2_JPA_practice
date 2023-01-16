@@ -11,6 +11,7 @@ import com.szs.account.services.AccountService;
 import com.szs.account.services.AccountSyncLogsService;
 import com.szs.account.services.TransactionService;
 import org.apache.commons.lang3.EnumUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -24,11 +25,22 @@ public class Apis {
     private final TransactionService transactionService;
     private final AccountSyncLogsService accountSyncLogsService;
 
+    @Autowired
     public Apis(AccountService accountService, TransactionService transactionService, AccountSyncLogsService accountSyncLogsService) {
         this.accountService = accountService;
         this.transactionService = transactionService;
         this.accountSyncLogsService = accountSyncLogsService;
     }
+
+    @GetMapping("health_check")
+    public String check() {
+        System.out.println("TEST");
+        return "Succeed";
+    }
+    /*public ApiResult<?> checked() throws Exception {
+        System.out.println("test");
+        return ApiResult.succeed("Succeed");
+    }*/
 
     /*
      * 2.2.1 계좌 생성

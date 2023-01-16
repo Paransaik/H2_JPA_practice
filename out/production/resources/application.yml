@@ -1,3 +1,6 @@
+server:
+  port: 5000
+
 spring:
   application:
     name: 3o3-assignments
@@ -18,9 +21,10 @@ spring:
       hibernate.dialect: org.hibernate.dialect.H2Dialect
   datasource:
     driver-class-name: org.h2.Driver
+#    h2 database 오류로 인해(Index가 0부터 시작하는 현상), ZERO_BASED_ENUMS=TRUE 하였습니다.
     url: "jdbc:h2:mem:account_database;MODE=MYSQL;DB_CLOSE_DELAY=-1;ZERO_BASED_ENUMS=TRUE"
     username: sa
-    password:
+    password: sa
     hikari:
       minimum-idle: 1
       maximum-pool-size: 5
@@ -32,5 +36,10 @@ spring:
       schema-locations: classpath:schema-h2.sql
       data-locations: classpath:data-h2.sql
 
-server:
-  port: 5000
+
+
+logging:
+  level:
+    org:
+      springframework:
+        security=debug
